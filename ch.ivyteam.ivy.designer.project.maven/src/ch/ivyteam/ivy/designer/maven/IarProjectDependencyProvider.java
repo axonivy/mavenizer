@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DefaultArtifact;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -24,6 +23,7 @@ import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
 import ch.ivyteam.di.restricted.DiCore;
 import ch.ivyteam.ivy.library.ILibraryConfiguration;
 import ch.ivyteam.ivy.persistence.PersistencyException;
+import ch.ivyteam.ivy.persistence.ivyarchive.IvyArchiveConstants;
 import ch.ivyteam.ivy.persistence.ivyarchive.IvyArchiveUtils;
 import ch.ivyteam.ivy.project.IIvyProject;
 import ch.ivyteam.ivy.project.IIvyProjectManager;
@@ -46,10 +46,8 @@ public class IarProjectDependencyProvider implements IMavenProjectChangedListene
     MavenProjectChangedEvent first = events[0];
     
     Set<Artifact> artifacts = first.getMavenProject().getMavenProject().getArtifacts();
-    Set<DefaultArtifact> iars = artifacts.stream()
-            .filter(a -> a instanceof DefaultArtifact)
-            .map(a -> (DefaultArtifact) a)
-            .filter(a -> a.getType().equals("iar"))
+    Set<Artifact> iars = artifacts.stream()
+            .filter(a -> a.getType().equals(IvyArchiveConstants.FILE_EXTENSION))
             .collect(Collectors.toSet());
     provideIarDepsToWorkspace(iars);
     
@@ -68,7 +66,7 @@ public class IarProjectDependencyProvider implements IMavenProjectChangedListene
     return removed;
   }
   
-  private void removeIarDepsFromWorkspace(Set<ArtifactKey> removed)
+  void removeIarDepsFromWorkspace(Set<ArtifactKey> removed)
   {
     List<IIvyProject> deletableProjects = findWsProjectForArtifactKey(removed);
     removeFromWorskpace(deletableProjects);
@@ -129,9 +127,9 @@ public class IarProjectDependencyProvider implements IMavenProjectChangedListene
     }
   }
 
-  void provideIarDepsToWorkspace(Set<DefaultArtifact> iars)
+  void provideIarDepsToWorkspace(Set<Artifact> iars)
   {
-    for (DefaultArtifact artifact : iars)
+    for (Artifact artifact : iars)
     {
       if (findWsProjectForIar(artifact.getFile()) == null)
       {
@@ -140,7 +138,7 @@ public class IarProjectDependencyProvider implements IMavenProjectChangedListene
     }
   }
 
-  private void addToWorkspace(DefaultArtifact artifact)
+  private void addToWorkspace(Artifact artifact)
   {
     try
     {
