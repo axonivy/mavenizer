@@ -12,7 +12,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -21,113 +21,142 @@ import org.eclipse.m2e.core.embedder.ArtifactRef;
 import org.eclipse.m2e.core.project.IMavenProjectChangedListener;
 import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
 
-import ch.ivyteam.ivy.designer.ide.DesignerIDEPlugin;
+import ch.ivyteam.di.restricted.DiCore;
 import ch.ivyteam.ivy.library.ILibraryConfiguration;
 import ch.ivyteam.ivy.persistence.PersistencyException;
 import ch.ivyteam.ivy.persistence.ivyarchive.IvyArchiveUtils;
 import ch.ivyteam.ivy.project.IIvyProject;
+import ch.ivyteam.ivy.project.IIvyProjectManager;
 import ch.ivyteam.ivy.resource.datamodel.ResourceDataModelException;
+import ch.ivyteam.log.Logger;
 
 public class IarProjectDependencyProvider implements IMavenProjectChangedListener
 {
+  private static final Logger LOGGER = Logger.getLogger(IarProjectDependencyProvider.class);
+  private IIvyProjectManager ivyProjectManager;
+
+  public IarProjectDependencyProvider()
+  {
+    ivyProjectManager = DiCore.getGlobalInjector().getInstance(IIvyProjectManager.class);
+  }
 
   @Override
   public void mavenProjectChanged(MavenProjectChangedEvent[] events, IProgressMonitor monitor)
   {
     MavenProjectChangedEvent first = events[0];
-    findRemovedArtifacts(first.getMavenProject().getMavenProjectArtifacts(), first.getOldMavenProject().getMavenProjectArtifacts());
-    //first.getOldMavenProject().getMavenProjectArtifacts()
+    
     Set<Artifact> artifacts = first.getMavenProject().getMavenProject().getArtifacts();
     Set<DefaultArtifact> iars = artifacts.stream()
             .filter(a -> a instanceof DefaultArtifact)
             .map(a -> (DefaultArtifact) a)
             .filter(a -> a.getType().equals("iar"))
             .collect(Collectors.toSet());
-    newIarDeps(first.getSource().getProject(), iars);
+    provideIarDepsToWorkspace(iars);
+    
+    Set<ArtifactKey> removedArtifacts = findRemovedArtifacts(
+            first.getMavenProject().getMavenProjectArtifacts(), 
+            first.getOldMavenProject().getMavenProjectArtifacts());
+    removeIarDepsFromWorkspace(removedArtifacts);
   }
 
-  private void findRemovedArtifacts(Set<ArtifactRef> current, Set<ArtifactRef> old)
+  private static Set<ArtifactKey> findRemovedArtifacts(Set<ArtifactRef> current, Set<ArtifactRef> old)
   {
     Set<ArtifactKey> currentKeys = current.stream().map(ref -> ref.getArtifactKey()).collect(Collectors.toSet());
     Set<ArtifactKey> removed = old.stream()
             .map(ref -> ref.getArtifactKey()).filter(key -> !currentKeys.contains(key))
             .collect(Collectors.toSet());
-    
+    return removed;
+  }
+  
+  private void removeIarDepsFromWorkspace(Set<ArtifactKey> removed)
+  {
+    List<IIvyProject> deletableProjects = findWsProjectForArtifactKey(removed);
+    removeFromWorskpace(deletableProjects);
+  }
+
+  private void removeFromWorskpace(List<IIvyProject> deletableProjects)
+  {
+    for (IIvyProject project : deletableProjects)
+    {
+      try
+      {
+        project.getProject().delete(false, true, new NullProgressMonitor());
+      }
+      catch (CoreException ex)
+      {
+        LOGGER.error("Failed to automatically remove iar '"+project+"' which is no longer required by another maven project.");
+      }
+    }
+  }
+
+  private List<IIvyProject> findWsProjectForArtifactKey(Set<ArtifactKey> removed)
+  {
     List<IIvyProject> deletableProjects = new ArrayList<>();
     for(ArtifactKey key : removed)
     {
       IIvyProject project = findIvyProject(key);
       if (project != null && IvyArchiveUtils.isIvyArchiveProject(project.getProject()))
       {
-        // check no other deps
+        // TODO check no other deps
         deletableProjects.add(project);
       }
     }
-    for (IIvyProject project : deletableProjects)
-    {
-      try
-    {
-      project.getProject().delete(false, true, new NullProgressMonitor());
-    }
-    catch (CoreException ex)
-    {
-      // TODO Auto-generated catch block
-      ex.printStackTrace();
-    }
-    }
-    
-    System.out.println(current);
+    return deletableProjects;
   }
 
   private IIvyProject findIvyProject(ArtifactKey key)
   {
-    for(IIvyProject project : DesignerIDEPlugin.getDefault().getProjectManager().getIvyProjects())
+    for(IIvyProject project : ivyProjectManager.getIvyProjects())
     {
-      try
+      if (key.equals(getKey(project)))
       {
-        ILibraryConfiguration library = project.getLibrary(null);
-        ArtifactKey libraryKey = new org.eclipse.m2e.core.embedder.ArtifactKey(library.getId().groupId(), library.getId().id(), library.getVersion().getRaw(), null);
-        if (libraryKey.equals(key))
-        {
-          return project;
-        }
-      }
-      catch (ResourceDataModelException ex)
-      {
-        // TODO Auto-generated catch block
-        ex.printStackTrace();
+        return project;
       }
     }
     return null;
   }
+  
+  private static ArtifactKey getKey(IIvyProject project)
+  {
+    try
+    {
+      ILibraryConfiguration library = project.getLibrary(null);
+      return new ArtifactKey(library.getId().groupId(), library.getId().id(), library.getVersion().getRaw(), null);
+    }
+    catch (ResourceDataModelException ex)
+    {
+      return null;
+    }
+  }
 
-  private void newIarDeps(IProject project, Set<DefaultArtifact> iars)
+  void provideIarDepsToWorkspace(Set<DefaultArtifact> iars)
   {
     for (DefaultArtifact artifact : iars)
     {
-      System.out.println("i depend on " + artifact);
-      if (findProject(project.getWorkspace(), artifact.getFile()) == null)
+      if (findWsProjectForIar(artifact.getFile()) == null)
       {
-        try
-        {
-          IIvyProject addedIarDep = DesignerIDEPlugin.getDefault().getProjectManager().createIvyArchiveProject(artifact.getFile(), new NullProgressMonitor());
-          addedIarDep.toString();
-        }
-        catch (PersistencyException | CoreException | IOException ex)
-        {
-          // TODO Auto-generated catch block
-          ex.printStackTrace();
-        }
+        addToWorkspace(artifact);
       }
     }
-    // TODO Auto-generated method stub
-    System.out.println("changed...");
+  }
+
+  private void addToWorkspace(DefaultArtifact artifact)
+  {
+    try
+    {
+      IIvyProject addedIarDep = ivyProjectManager.createIvyArchiveProject(artifact.getFile(), new NullProgressMonitor());
+      LOGGER.debug("Added '"+addedIarDep+"' from maven repository");
+    }
+    catch (PersistencyException | CoreException | IOException ex)
+    {
+      LOGGER.error("Failed to provide '"+artifact+"' from maven repository");
+    }
   }
   
-  private IProject findProject(IWorkspace ws, File iar)
+  private static IProject findWsProjectForIar(File iar)
   {
     URI uri = IvyArchiveUtils.getIvyArchiveRootUri(iar);
-    IProject[] projects = ws.getRoot().getProjects(IContainer.INCLUDE_HIDDEN);
+    IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects(IContainer.INCLUDE_HIDDEN);
     for(IProject project : projects)
     {
       if (uri.equals( project.getLocationURI()))
