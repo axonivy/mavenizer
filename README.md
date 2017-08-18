@@ -6,6 +6,8 @@ Often your Axon.ivy application is built with many fine separated Axon.ivy proje
 
 And here comes this cool extension into to game. Once activated it will automatically add dependencies of your project directly into your workspace. These dependencies are resolved via Maven and imported as IAR. This make your workspace builds fast and effective.
 
+![live demo](https://github.com/ivy-supplements/mavenizer/blob/master/doc/resolveIarProjectsViaPomXml.gif)
+
 ## Usage
 1. Install the Plugin
 1. Convert your IvyProject into a Maven natured project: `Java Perspective > right click on project > configure > convert to Maven Project`
@@ -13,6 +15,6 @@ And here comes this cool extension into to game. Once activated it will automati
 
 ## Installation
 1. Open a Designer (6.0.0 or new) > `Help > Install New Software`
-1. Copy the URI https://ivy-supplements.github.io/mavenizer/ into the "Work with" text field on top
+1. Copy the URI https://ivy-supplements.github.io/mavenizer/ into the "Work with" text field on top ![update site](https://github.com/ivy-supplements/mavenizer/blob/master/doc/installMavenizerSelectP2Feature.png)
 1. Presse next, accept the license and agree to install unsigned content
 1. Restart the Designer as suggested when the installation process ends
