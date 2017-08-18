@@ -1,4 +1,6 @@
 language: java
+install:
+- |
 deploy:
   provider: pages
   skip_cleanup: true
