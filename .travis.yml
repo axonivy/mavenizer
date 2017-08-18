@@ -3,7 +3,7 @@ install:
 - |
 sudo: false
 script: mvn clean verify
-before_deploy: cp /home/travis/build/ivy-supplements/mavenizer/README.MD /home/travis/build/ivy-supplements/mavenizer/designer.project.maven.p2/target/repository
+before_deploy: cp /home/travis/build/ivy-supplements/mavenizer/README.md /home/travis/build/ivy-supplements/mavenizer/designer.project.maven.p2/target/repository/README.md
 deploy:
   provider: pages
   local_dir: /home/travis/build/ivy-supplements/mavenizer/designer.project.maven.p2/target/repository
