@@ -6,7 +6,7 @@ Often your Axon.ivy application is built with many fine separated Axon.ivy proje
 
 And here comes this cool extension into to game. Once activated it will automatically add dependencies of your project directly into your workspace. These dependencies are resolved via Maven and imported as IAR. This make your workspace builds fast and effective.
 
-![live demo](https://github.com/ivy-supplements/mavenizer/blob/master/doc/resolveIarProjectsViaPomXml.gif)
+![live demo](https://raw.githubusercontent.com/ivy-supplements/mavenizer/master/doc/resolveIarProjectsViaPomXml.gif)
 
 ## Usage
 1. Install the Plugin
