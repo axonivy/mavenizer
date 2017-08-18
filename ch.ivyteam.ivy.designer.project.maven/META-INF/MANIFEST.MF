@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Designer Project Maven
+Bundle-SymbolicName: ch.ivyteam.ivy.designer.project.maven;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: ch.ivyteam.ivy.designer.maven.MavenIvyProjectPlugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.m2e.core;bundle-version="1.5.1",
+ org.eclipse.m2e.maven.runtime;bundle-version="1.5.1",
+ ch.ivyteam.ivy.designer.ide;bundle-version="6.0.0"
+Export-Package: ch.ivyteam.ivy.designer.maven
+Bundle-ActivationPolicy: lazy
