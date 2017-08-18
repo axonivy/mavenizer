@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/designer.project.maven.feature_1.0.0.qualifier.jar" id="designer.project.maven.feature" version="1.0.0.qualifier">
+      <category name="com.axonivy.supplements.mavenizer"/>
+   </feature>
+   <category-def name="com.axonivy.supplements.mavenizer" label="Mavenizer"/>
+</site>

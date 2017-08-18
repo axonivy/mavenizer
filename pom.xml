@@ -11,7 +11,17 @@
 
 	<modules>
 		<module>ch.ivyteam.ivy.designer.project.maven</module>
+        <module>designer.project.maven.feature</module>
+        <module>designer.project.maven.p2</module>
 	</modules>
+
+    <repositories>
+		<repository>
+			<id>ivy.nightly.release</id>
+			<layout>p2</layout>
+			<url>http://developer.axonivy.com/dev-releases/ivy/nightly/current/p2</url>
+		</repository>
+	</repositories>
 
     <properties>
 		<tycho.version>1.0.0</tycho.version>

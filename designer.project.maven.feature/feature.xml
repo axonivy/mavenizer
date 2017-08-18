@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="designer.project.maven.feature"
+      label="Mavenizer Feature"
+      version="1.0.0.qualifier"
+      provider-name="ivy-supplements">
+
+   <description url="https://ivy-supplements.github.io/mavenizer">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="https://github.com/ivy-supplements/mavenizer/blob/master/LICENSE">
+      [Enter License Description here.]
+   </license>
+
+   <plugin
+         id="ch.ivyteam.ivy.designer.project.maven"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
