@@ -1,6 +1,8 @@
 language: java
 install:
 - |
+sudo: false
+script: mvn clean verify
 deploy:
   provider: pages
   skip_cleanup: true
