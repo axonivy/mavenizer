@@ -8,14 +8,11 @@ And here comes this cool extension into to game. Once activated it will automati
 
 ## Usage
 1. Install the Plugin
-1. Convert your IvyProject into a Maven natured project: Java Perspective > right click on project > configure > convert to Maven Project
+1. Convert your IvyProject into a Maven natured project: `Java Perspective > right click on project > configure > convert to Maven Project`
 1. Add IAR dependencies to your project that are available via Maven 
 
-## PreCondition
-1. The IAR dependencies you require are accessible in a Maven repository
-
 ## Installation
-1. Open a Designer (6.0.0 or new) > Help > Install New Software
+1. Open a Designer (6.0.0 or new) > `Help > Install New Software`
 1. Copy the URI https://ivy-supplements.github.io/mavenizer/ into the "Work with" text field on top
 1. Presse next, accept the license and agree to install unsigned content
 1. Restart the Designer as suggested when the installation process ends
