@@ -14,7 +14,7 @@ And here comes this cool extension into to game. Once activated it will automati
 1. Add IAR dependencies to your project that are available via Maven 
 
 ## Installation
-1. Open a Designer (6.0.0 or new) > `Help > Install New Software`
+1. Open a Designer (6.0.0 or newer) > `Help > Install New Software`
 1. Copy the URI https://ivy-supplements.github.io/mavenizer/ into the "Work with" text field on top ![update site](https://raw.githubusercontent.com/ivy-supplements/mavenizer/master/doc/installMavenizerSelectP2Feature.png)
 1. Presse next, accept the license and agree to install unsigned content
 1. Restart the Designer as suggested when the installation process ends
