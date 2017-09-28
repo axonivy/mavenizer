@@ -27,7 +27,6 @@ import ch.ivyteam.ivy.persistence.ivyarchive.IvyArchiveConstants;
 import ch.ivyteam.ivy.persistence.ivyarchive.IvyArchiveUtils;
 import ch.ivyteam.ivy.project.IIvyProject;
 import ch.ivyteam.ivy.project.IIvyProjectManager;
-import ch.ivyteam.ivy.resource.datamodel.ResourceDataModelException;
 import ch.ivyteam.log.Logger;
 
 public class IarProjectDependencyProvider implements IMavenProjectChangedListener
@@ -121,7 +120,7 @@ public class IarProjectDependencyProvider implements IMavenProjectChangedListene
       ILibraryConfiguration library = project.getLibrary(null);
       return new ArtifactKey(library.getId().groupId(), library.getId().id(), library.getVersion().getRaw(), null);
     }
-    catch (ResourceDataModelException ex)
+    catch (Exception ex)
     {
       return null;
     }
