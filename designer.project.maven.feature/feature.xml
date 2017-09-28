@@ -2,7 +2,7 @@
 <feature
       id="designer.project.maven.feature"
       label="Mavenizer Feature"
-      version="1.0.0.qualifier"
+      version="1.0.1.qualifier"
       provider-name="ivy-supplements">
 
    <description url="https://ivy-supplements.github.io/mavenizer">
