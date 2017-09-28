@@ -1,8 +1,5 @@
 package ch.ivyteam.ivy.designer.maven;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -22,11 +19,11 @@ import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
 
 import ch.ivyteam.di.restricted.DiCore;
 import ch.ivyteam.ivy.library.ILibraryConfiguration;
-import ch.ivyteam.ivy.persistence.PersistencyException;
 import ch.ivyteam.ivy.persistence.ivyarchive.IvyArchiveConstants;
 import ch.ivyteam.ivy.persistence.ivyarchive.IvyArchiveUtils;
 import ch.ivyteam.ivy.project.IIvyProject;
 import ch.ivyteam.ivy.project.IIvyProjectManager;
+import ch.ivyteam.ivy.project.IvyProjectNavigationUtil;
 import ch.ivyteam.log.Logger;
 
 public class IarProjectDependencyProvider implements IMavenProjectChangedListener
@@ -133,7 +130,7 @@ public class IarProjectDependencyProvider implements IMavenProjectChangedListene
   {
     for (Artifact artifact : iars)
     {
-      if (findWsProjectForIar(artifact.getFile()) == null)
+      if (findWsProjectForArtifact(artifact) == null)
       {
         addToWorkspace(artifact);
       }
@@ -147,19 +144,24 @@ public class IarProjectDependencyProvider implements IMavenProjectChangedListene
       IIvyProject addedIarDep = ivyProjectManager.createIvyArchiveProject(artifact.getFile(), new NullProgressMonitor());
       LOGGER.debug("Added '"+addedIarDep+"' from maven repository");
     }
-    catch (PersistencyException | CoreException | IOException ex)
+    catch (Exception ex)
     {
       LOGGER.error("Failed to provide '"+artifact+"' from maven repository");
     }
   }
   
-  private static IProject findWsProjectForIar(File iar)
+  private static IProject findWsProjectForArtifact(Artifact artifact)
   {
-    URI uri = IvyArchiveUtils.getIvyArchiveRootUri(iar);
+    ArtifactKey keyToFind = new ArtifactKey(artifact);
     IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects(IContainer.INCLUDE_HIDDEN);
     for(IProject project : projects)
     {
-      if (uri.equals( project.getLocationURI()))
+      IIvyProject ivyProject = IvyProjectNavigationUtil.getIvyProject(project);
+      if (ivyProject == null)
+      {
+        continue;
+      }
+      if (keyToFind.equals(getKey(ivyProject)))
       {
         return project;
       }
