@@ -50,10 +50,13 @@ public class IarProjectDependencyProvider implements IMavenProjectChangedListene
             .collect(Collectors.toSet());
     provideIarDepsToWorkspace(iars);
     
-    Set<ArtifactKey> removedArtifacts = findRemovedArtifacts(
-            first.getMavenProject().getMavenProjectArtifacts(), 
-            first.getOldMavenProject().getMavenProjectArtifacts());
-    removeIarDepsFromWorkspace(removedArtifacts);
+    if (first.getOldMavenProject() != null)
+    {
+      Set<ArtifactKey> removedArtifacts = findRemovedArtifacts(
+              first.getMavenProject().getMavenProjectArtifacts(), 
+              first.getOldMavenProject().getMavenProjectArtifacts());
+      removeIarDepsFromWorkspace(removedArtifacts);
+    }
   }
 
   private static Set<ArtifactKey> findRemovedArtifacts(Set<ArtifactRef> current, Set<ArtifactRef> old)
