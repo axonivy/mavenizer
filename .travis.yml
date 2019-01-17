@@ -5,9 +5,10 @@ sudo: false
 script: mvn clean verify
 before_deploy: cp /home/travis/build/ivy-supplements/mavenizer/README.md /home/travis/build/ivy-supplements/mavenizer/designer.project.maven.p2/target/repository/README.md
 deploy:
-  provider: pages
-  local_dir: /home/travis/build/ivy-supplements/mavenizer/designer.project.maven.p2/target/repository
+  provider: releases
+  file_glob: true
+  file: /home/travis/build/ivy-supplements/mavenizer/designer.project.maven.p2/target/repository/**/*
   skip_cleanup: true
-  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
+  api_key: $GITHUB_TOKEN # Set in travis-ci.org dashboard
   on:
-    branch: master
+    tags: true
