@@ -40,17 +40,17 @@ public class IarProjectDependencyProvider implements IMavenProjectChangedListene
   public void mavenProjectChanged(MavenProjectChangedEvent[] events, IProgressMonitor monitor)
   {
     MavenProjectChangedEvent first = events[0];
-    
+
     Set<Artifact> artifacts = first.getMavenProject().getMavenProject().getArtifacts();
     Set<Artifact> iars = artifacts.stream()
             .filter(a -> a.getType().equals(IvyArchiveConstants.FILE_EXTENSION))
             .collect(Collectors.toSet());
     provideIarDepsToWorkspace(iars);
-    
+
     if (first.getOldMavenProject() != null)
     {
       Set<ArtifactKey> removedArtifacts = findRemovedArtifacts(
-              first.getMavenProject().getMavenProjectArtifacts(), 
+              first.getMavenProject().getMavenProjectArtifacts(),
               first.getOldMavenProject().getMavenProjectArtifacts());
       removeIarDepsFromWorkspace(removedArtifacts);
     }
@@ -64,7 +64,7 @@ public class IarProjectDependencyProvider implements IMavenProjectChangedListene
             .collect(Collectors.toSet());
     return removed;
   }
-  
+
   void removeIarDepsFromWorkspace(Set<ArtifactKey> removed)
   {
     List<IIvyProject> deletableProjects = findWsProjectForArtifactKey(removed);
@@ -112,7 +112,7 @@ public class IarProjectDependencyProvider implements IMavenProjectChangedListene
     }
     return null;
   }
-  
+
   private static ArtifactKey getKey(IIvyProject project)
   {
     try
@@ -141,7 +141,7 @@ public class IarProjectDependencyProvider implements IMavenProjectChangedListene
   {
     try
     {
-      IIvyProject addedIarDep = ivyProjectManager.createIvyArchiveProject(artifact.getFile(), new NullProgressMonitor());
+      IIvyProject addedIarDep = ivyProjectManager.importer().ivyArchives(artifact.getFile()).run().ivyProject();
       LOGGER.debug("Added '"+addedIarDep+"' from maven repository");
     }
     catch (Exception ex)
@@ -149,7 +149,7 @@ public class IarProjectDependencyProvider implements IMavenProjectChangedListene
       LOGGER.error("Failed to provide '"+artifact+"' from maven repository");
     }
   }
-  
+
   private static IProject findWsProjectForArtifact(Artifact artifact)
   {
     ArtifactKey keyToFind = new ArtifactKey(artifact);

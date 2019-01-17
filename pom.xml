@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.axonivy.ivy.supplements</groupId>
 	<artifactId>mavenizer-modules</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>7.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<organization><name>The open source community of Axon.ivy</name></organization>
@@ -17,9 +17,9 @@
 
     <repositories>
 		<repository>
-			<id>ivy.lts.release</id>
+			<id>ivy.nightly.release</id>
 			<layout>p2</layout>
-			<url>https://download.axonivy.com/7.0.0/p2</url>
+			<url>https://file.axonivy.rocks/p2/nightly/</url>
 		</repository>
 	</repositories>
 
