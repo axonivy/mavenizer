@@ -32,6 +32,7 @@ def deployP2Repository(def folderName) {
     def destFolder = "/home/axonivy1/data/p2/$folderName"
 
     echo "Upload p2 repository to $host:$destFolder"
+    sh "ssh $host mkdir -p $destFolder"
     sh "rsync -r designer.project.maven.p2/target/repository/ $host:$destFolder"
     sh "ssh $host touch $destFolder/p2.ready"
   }
