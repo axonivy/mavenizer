@@ -17,7 +17,7 @@ pipeline {
       steps {
         script {
           maven cmd: 'clean verify'
-		  deployP2Repository('features/mavenizer/nightly')
+		  deployP2Repository('features/mavenizer/7.0')
 		  
         }
 	    archiveArtifacts 'designer.project.maven.p2/target/*.zip'
