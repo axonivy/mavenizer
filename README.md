@@ -15,10 +15,10 @@ And here comes this cool extension into to game. Once activated it will automati
 
 ## Installation
 1. Open a Designer (6.0.0 or newer) > `Help > Install New Software`
-1. Copy the update site URI https://ivy-supplements.github.io/mavenizer/ into the "Work with" text field on top ![update site](https://raw.githubusercontent.com/ivy-supplements/mavenizer/master/doc/installMavenizerSelectP2Feature.png)
+1. Copy the update site URI into the "Work with" text field on top ![update site](https://raw.githubusercontent.com/ivy-supplements/mavenizer/master/doc/installMavenizerSelectP2Feature.png)
 1. Presse next, accept the license and agree to install unsigned content
 1. Restart the Designer as suggested when the installation process ends
 
 ## Update Sites
-* <= 7.2.0 https://ivy-supplements.github.io/mavenizer/
+* <= 7.2.0: https://ivy-supplements.github.io/mavenizer/
 * Nighly & Sprint releases: https://file.axonivy.rocks/p2/nightly/
