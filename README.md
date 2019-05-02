@@ -20,6 +20,6 @@ And here comes this cool extension into to game. Once activated it will automati
 1. Restart the Designer as suggested when the installation process ends
 
 ## Update Sites
-* <= 7.2.0: https://file.axonivy.rocks/p2/features/mavenizer/7.0
-* >= 7.3.0: https://file.axonivy.rocks/p2/features/mavenizer/7.3
-* Nighly & Sprint releases: https://file.axonivy.rocks/p2/nightly/
+* <= 7.2.0: https://file.axonivy.rocks/p2/features/mavenizer/7.0/
+* \>= 7.3.0 : https://file.axonivy.rocks/p2/features/mavenizer/7.3/
+* nightly : https://file.axonivy.rocks/p2/features/mavenizer/nightly/
