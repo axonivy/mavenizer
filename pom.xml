@@ -3,16 +3,16 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.axonivy.ivy.supplements</groupId>
 	<artifactId>mavenizer-modules</artifactId>
-	<version>7.3.0-SNAPSHOT</version>
+	<version>8.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<organization><name>The open source community of Axon.ivy</name></organization>
 	<description>Pushes the maven integration of Axon.ivy projects one step further</description>
 
 	<modules>
-		<module>ch.ivyteam.ivy.designer.project.maven</module>
-        <module>designer.project.maven.feature</module>
-        <module>designer.project.maven.p2</module>
+	  <module>ch.ivyteam.ivy.designer.project.maven</module>
+	  <module>designer.project.maven.feature</module>
+	  <module>designer.project.maven.p2</module>
 	</modules>
 
     <repositories>
