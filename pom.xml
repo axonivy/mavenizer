@@ -19,7 +19,7 @@
 		<repository>
 			<id>ivy.lts8.release</id>
 			<layout>p2</layout>
-			<url>https://file.axonivy.rocks/p2/lts-8.0/</url>
+			<url>https://p2.ivyteam.ch/p2/lts-8.0/</url>
 		</repository>
 	</repositories>
 
