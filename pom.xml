@@ -19,7 +19,7 @@
 		<repository>
 			<id>ivy.lts.release</id>
 			<layout>p2</layout>
-			<url>https://download.axonivy.com/7.0.0/p2</url>
+			<url>https://p2.ivyteam.ch/7.0.0/p2</url>
 		</repository>
 	</repositories>
 
